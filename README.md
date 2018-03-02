@@ -15,15 +15,11 @@ npm install dirkschumacher/nodepicosat
 
 Suppose we want to test the following formula for satisfiability:
 
-$$
-(A \Rightarrow B)  \wedge (B \Rightarrow C) \wedge (C \Rightarrow A)
-$$
+(*A* ⇒ *B*)∧(*B* ⇒ *C*)∧(*C* ⇒ *A*)
 
 This can be formulated as a CNF (conjunctive normal form):
 
-$$
-(\neg A \vee B)  \wedge (\neg B \vee C) \wedge (\neg C \vee A)
-$$
+(¬*A* ∨ *B*)∧(¬*B* ∨ *C*)∧(¬*C* ∨ *A*)
 
 In `picosat` the problem is encoded as an array of integer arrays. Each positive, non-zero integer represents a literal. Negative integers are negated literales (e.g. not A).
 

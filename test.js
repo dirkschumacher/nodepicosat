@@ -4,15 +4,14 @@ const test = require("tape")
 const picosat_sat = require(".")
 
 test("it solves a simple problem", (t) => {
-  const formula = [1, 2, 0, -1, 2, 0]
-  const assumptions = []
-  const result = picosat_sat(formula, assumptions)
+  const formula = [[1, 2], [-1, 2]]
+  const result = picosat_sat(formula)
   t.equal(result.satisfiable, true)
   t.end()
 })
 
 test("it supports assumptions", (t) => {
-  const formula = [1, 2, 0, -1, 2, 0]
+  const formula = [[1, 2], [-1, 2]]
   const assumptions = [1, 2]
   const result = picosat_sat(formula, assumptions)
   t.equal(result.satisfiable, true)
@@ -23,7 +22,7 @@ test("it supports assumptions", (t) => {
 })
 
 test("it correctly proves unsatisfiability", (t) => {
-  const formula = [1, 0, -1, 0]
+  const formula = [[1], [-1]]
   const assumptions = []
   const result = picosat_sat(formula, assumptions)
   t.equal(result.satisfiable, false)

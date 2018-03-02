@@ -7,13 +7,15 @@
 
 ```js
 const picosat_sat = require("picosat")
-const formula = [1, 2, 0, -1, 2, 0]
+// (A OR B) AND (NOT A OR B)
+const formula = [[1, 2], [-1, 2]]
 const assumptions = [1]
 
 // satisfiable
 console.log(picosat_sat(formula, assumptions))
-console.log(picosat_sat(formula, []))
+console.log(picosat_sat(formula))
 
-// not satisfiable => empty array
-console.log(picosat_sat([1, 0, -1, 0], []))
+// not satisfiable
+// (A) AND (NOT A)
+console.log(picosat_sat([[1], [-1]]))
 ```

@@ -46,4 +46,4 @@ console.log(picosat_sat(formula, [1, -3])) // assume A is TRUE, but C is FALSE
 
 ## License
 
-This R package is licensed under MIT. The PicoSAT solver bundled in this package is licensed MIT as well: Copyright (c) Armin Biere, Johannes Kepler University.
+This package is licensed under MIT. The PicoSAT solver bundled in this package is licensed MIT as well: Copyright (c) Armin Biere, Johannes Kepler University.

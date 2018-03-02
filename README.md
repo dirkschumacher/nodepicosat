@@ -34,7 +34,7 @@ const res = picosat_sat(formula)
 console.log(res)
 ```
 
-We can also test for satisfiability if we assume that a certain literal is `TRUE` or `FALSE`
+We can also test for satisfiability if we assume that a certain variable is `TRUE` or `FALSE`
 
 ```js
 console.log(picosat_sat(formula, [1])) // assume A is TRUE

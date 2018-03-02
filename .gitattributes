@@ -1,1 +1,2 @@
 lib/* linguist-vendored
+binding.gyp linguist-language=javascript

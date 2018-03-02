@@ -24,7 +24,7 @@ This can be formulated as a CNF (conjunctive normal form):
 In `picosat` the problem is encoded as an array of integer arrays. Each positive, non-zero integer represents a literal. Negative integers are negated literales (e.g. not A).
 
 ```js
-formula <- [[-1, 2], [-2, 3], [-3, 1]]
+const formula = [[-1, 2], [-2, 3], [-3, 1]]
 ```
 Having encoded the above formula, we can pass it to picosat.
 

@@ -1,7 +1,7 @@
 # nodepicosat
 [work in progress]: SAT solver picosat for javascript
 
-
+[![Build Status](https://travis-ci.org/dirkschumacher/nodepicosat.svg?branch=master)](https://travis-ci.org/dirkschumacher/nodepicosat)
 
 ## Example
 

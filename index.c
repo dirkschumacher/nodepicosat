@@ -1,6 +1,6 @@
 #include <node_api.h>
 #include <napi-macros.h>
-#include "picosat.h"
+#include "lib/picosat.h"
 
 NAPI_METHOD(node_picosat_sat) {
   NAPI_ARGV(2)

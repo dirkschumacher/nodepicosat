@@ -5,12 +5,28 @@
   "main": "index.js",
   "scripts": {
     "build": "node-gyp configure build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test.js | tap-min"
   },
-  "author": "",
+  "keywords": [
+    "picosat",
+    "sat-solver",
+    "solver",
+    "sat"
+  ],
+  "author": "Dirk Schumacher <mail@dirk-schumacher.de>",
+  "homepage": "https://github.com/dirkschumacher/nodepicosat",
+  "repository": "dirkschumacher/nodepicosat",
+  "bugs": "https://github.com/dirkschumacher/nodepicosat/issues",
+  "engines": {
+    "node": ">=8"
+  },
   "license": "MIT",
   "dependencies": {
     "napi-macros": "^1.3.0",
     "node-gyp-build": "^3.2.2"
+  },
+  "devDependencies": {
+    "tap-min": "^1.2.2",
+    "tape": "^4.9.0"
   }
 }

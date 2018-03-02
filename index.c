@@ -8,12 +8,12 @@ NAPI_METHOD(node_picosat_sat) {
   NAPI_ARGV_BUFFER(assumptions, 1)
 
   PicoSAT *pico_ptr = picosat_init();
-
-  for(size_t i = 0; i < formula_len; i++) {
+  size_t i;
+  for(i = 0; i < formula_len; i++) {
     picosat_add(pico_ptr, formula[i]);
   }
 
-  for(size_t i = 0; i < assumptions_len; i++) {
+  for(i = 0; i < assumptions_len; i++) {
     picosat_assume(pico_ptr, assumptions[i]);
   }
 
@@ -24,7 +24,8 @@ NAPI_METHOD(node_picosat_sat) {
     napi_create_array_with_length(env, nvars, &result_array);
 
     // get and set the variable solutions
-    for (int i = 1; i <= nvars; i++) {
+    int i;
+    for (i = 1; i <= nvars; i++) {
       int val = picosat_deref(pico_ptr, i) * i;
       napi_value int_val;
       napi_create_int32(env, val, &int_val);

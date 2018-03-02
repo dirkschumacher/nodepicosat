@@ -21,7 +21,7 @@ This can be formulated as a CNF (conjunctive normal form):
 
 (¬*A* ∨ *B*)∧(¬*B* ∨ *C*)∧(¬*C* ∨ *A*)
 
-In `picosat` the problem is encoded as an array of integer arrays. Each positive, non-zero integer represents a literal. Negative integers are negated literales (e.g. not A).
+In `picosat` the problem is encoded as an array of integer arrays. Each positive, non-zero integer represents a literal. Negative integers are negated literals (e.g. not A).
 
 ```js
 const formula = [[-1, 2], [-2, 3], [-3, 1]]

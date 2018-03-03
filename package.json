@@ -1,6 +1,6 @@
 {
   "name": "picosat",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "picosat SAT solver",
   "main": "index.js",
   "files": [
@@ -10,7 +10,7 @@
     "index.c"
   ],
   "scripts": {
-    "build": "node-gyp configure build",
+    "install": "node-gyp-build",
     "test": "node test.js"
   },
   "keywords": [

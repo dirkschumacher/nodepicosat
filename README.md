@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/dirkschumacher/nodepicosat.svg?branch=master)](https://travis-ci.org/dirkschumacher/nodepicosat)
+[![npm version](https://img.shields.io/npm/v/picosat.svg)](https://www.npmjs.com/package/picosat)
 
 # picosat for node
 
@@ -6,6 +7,12 @@ Node bindings to the [PicoSAT solver release 965](http://fmv.jku.at/picosat/) by
 
 ## Install
 
+Stable version:
+```
+npm install picosat
+```
+
+Development version:
 ```
 npm install dirkschumacher/nodepicosat
 ```

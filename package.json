@@ -1,6 +1,6 @@
 {
   "name": "picosat",
-  "version": "1.0.1",
+  "version": "1.1.0-alpha",
   "description": "picosat SAT solver",
   "main": "index.js",
   "files": [
@@ -10,8 +10,10 @@
     "index.c"
   ],
   "scripts": {
-    "install": "node-gyp-build",
-    "test": "node test.js"
+    "install": "prebuild-install || node-gyp-build",
+    "test": "node test.js",
+    "prebuild": "prebuild -t 9.0.0 --strip -u $githubtoken",
+    "prepublishOnly": "npm run prebuild"
   },
   "keywords": [
     "picosat",
@@ -29,9 +31,11 @@
   "license": "MIT",
   "dependencies": {
     "napi-macros": "^1.3.0",
-    "node-gyp-build": "^3.2.2"
+    "node-gyp-build": "^3.2.2",
+    "prebuild-install": "^2.5.1"
   },
   "devDependencies": {
+    "prebuild": "^7.4.0",
     "tape": "^4.9.0"
   }
 }

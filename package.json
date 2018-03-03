@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "picosat SAT solver",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "lib/*",
+    "binding.gyp",
+    "index.c"
+  ],
   "scripts": {
     "build": "node-gyp configure build",
     "test": "node test.js"

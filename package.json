@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node-gyp configure build",
-    "test": "node test.js | tap-min"
+    "test": "node test.js"
   },
   "keywords": [
     "picosat",
@@ -26,7 +26,6 @@
     "node-gyp-build": "^3.2.2"
   },
   "devDependencies": {
-    "tap-min": "^1.2.2",
     "tape": "^4.9.0"
   }
 }

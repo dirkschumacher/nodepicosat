@@ -21,7 +21,7 @@ const isValidAssumptions = (assumptions, nvars) => {
   // TODO: check for duplicates
   return Array.isArray(assumptions) &&
          assumptions.every(Number.isInteger) &&
-         assumptions.every(x => x >= 1 && x <= nvars)
+         assumptions.map(Math.abs).every(x => x >= 1 && x <= nvars)
 }
 
 const picosat_sat = (formula, assumptions) => {

@@ -41,6 +41,15 @@ const res = picosat_sat(formula)
 console.log(res)
 ```
 
+The result is an object:
+
+```js
+{
+  statusCode: <string>, // SATISFIABLE, UNSATISFIABLE, UNKNOWN
+  solution: <Array int> // an integer array with a positive or negative value for each variable. Negative values means false, positive true.
+}
+```
+
 We can also test for satisfiability if we assume that a certain variable is `TRUE` or `FALSE`
 
 ```js

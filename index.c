@@ -17,11 +17,13 @@ NAPI_METHOD(node_picosat_sat) {
     picosat_assume(pico_ptr, assumptions[i]);
   }
 
-  int res = picosat_sat(pico_ptr, -1);
+  int status_code = picosat_sat(pico_ptr, -1);
   napi_value result_array;
-  if (res == PICOSAT_SATISFIABLE) {
+
+  if (status_code == PICOSAT_SATISFIABLE) {
     int nvars = picosat_variables(pico_ptr);
-    napi_create_array_with_length(env, nvars, &result_array);
+    napi_create_array_with_length(env, nvars + 1, &result_array);
+
 
     // get and set the variable solutions
     int i;
@@ -29,12 +31,17 @@ NAPI_METHOD(node_picosat_sat) {
       int val = picosat_deref(pico_ptr, i) * i;
       napi_value int_val;
       napi_create_int32(env, val, &int_val);
-      napi_set_element(env, result_array, i - 1, int_val);
+      napi_set_element(env, result_array, i, int_val);
     }
   } else {
-    // returns empty array if not satisfiable
-    napi_create_array_with_length(env, 0, &result_array);
+    // returns an array with just the status code as first element
+    napi_create_array_with_length(env, 1, &result_array);
   }
+
+  // set the status code as first element of the array
+  napi_value js_status_code;
+  napi_create_int32(env, status_code, &js_status_code);
+  napi_set_element(env, result_array, 0, js_status_code);
 
   picosat_reset(pico_ptr);
 

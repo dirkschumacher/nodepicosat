@@ -46,14 +46,15 @@ const picosat_sat = (formula, assumptions) => {
     assumptionsBuffer
   )
 
-  let statusCode = "UNKNOWN"
+  let statusCode = "unknown"
   if (solution[0] === 10) {
-    statusCode = "SATISFIABLE"
+    statusCode = "satisfiable"
   } else if (solution[0] === 20) {
-    statusCode = "UNSATISFIABLE"
+    statusCode = "unsatisfiable"
   }
 
   return {
+    satisfiable: statusCode === "satisfiable",
     status: statusCode,
     solution: solution.slice(1)
   }

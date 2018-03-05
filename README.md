@@ -39,7 +39,8 @@ The result is an object:
 
 ```js
 {
-  statusCode: <string>, // SATISFIABLE, UNSATISFIABLE, UNKNOWN
+  satisfiable: <boolean>, // true iff satisfiable
+  statusCode: <string>, // satisfiable, unsatisfiable, unknown
   solution: <Array int> // an integer array with a positive or negative value for each variable. Negative values means false, positive true.
 }
 ```

@@ -29,6 +29,11 @@ IN THE SOFTWARE.
 #include <stdio.h>
 #include <stddef.h>
 
+/* Added to support windows builds in node
+ * Not part of the original picosat code
+ */
+#include "../js_picosat.h"
+
 /*------------------------------------------------------------------------*/
 /* The following macros allows for users to distiguish between different
  * versions of the API.  The first 'PICOSAT_REENTRANT_API' is defined for

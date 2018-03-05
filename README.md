@@ -7,14 +7,8 @@ Node bindings to the [PicoSAT solver release 965](http://fmv.jku.at/picosat/) by
 
 ## Install
 
-Stable version:
 ```
 npm install picosat
-```
-
-Development version:
-```
-npm install dirkschumacher/nodepicosat
 ```
 
 ## Example

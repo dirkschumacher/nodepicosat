@@ -20,6 +20,9 @@
     "sat"
   ],
   "author": "Dirk Schumacher <mail@dirk-schumacher.de>",
+  "contributors": [
+    "Jannis R <mail@jannisr.de>"
+  ],
   "homepage": "https://github.com/dirkschumacher/nodepicosat",
   "repository": "dirkschumacher/nodepicosat",
   "bugs": "https://github.com/dirkschumacher/nodepicosat/issues",

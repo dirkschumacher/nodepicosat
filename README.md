@@ -66,7 +66,7 @@ const assumptions = [
 solve(formula, assumptions)
 ```
 
-# Low-level interface
+## Low-level interface
 
 This package also provides a low-level interface that works directly on [`Buffer`s](https://nodejs.org/api/buffer.html), without encoding into/decoding from the format that *PicoSAT* works on:
 

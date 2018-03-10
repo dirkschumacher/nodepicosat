@@ -1,33 +1,40 @@
 "use strict"
 
 const test = require("tape")
-const picosat_sat = require(".")
+const solve = require(".")
+const {encode, solveUnsafe, SATISFIABLE, UNSATISFIABLE} = solve
 
-test("it solves a simple problem", (t) => {
-  const formula = [[1, 2], [-1, 2]]
-  const result = picosat_sat(formula)
-  t.equal(result.status, "satisfiable")
-  t.equal(result.satisfiable, true)
+const formula1 = [
+  ['A', 'B'],
+  ['!A', 'B']
+]
+const assumptions1 = ['!A', 'B']
+
+test('solve solves a simple problem', (t) => {
+  const {status, satisfiable} = solve(formula1)
+
+  t.equal(status, SATISFIABLE)
+  t.equal(satisfiable, true)
   t.end()
 })
 
-test("it supports assumptions", (t) => {
-  const formula = [[1, 2], [-1, 2]]
-  const assumptions = [-1, 2]
-  const result = picosat_sat(formula, assumptions)
-  t.equal(result.solution.length, 2)
-  t.equal(result.solution[0], -1)
-  t.equal(result.solution[1], 2)
-  t.equal(result.status, "satisfiable")
-  t.equal(result.satisfiable, true)
+test('solve supports assumptions', (t) => {
+  const {solution, status, satisfiable} = solve(formula1, assumptions1)
+
+  t.equal(solution.length, 2)
+  t.equal(solution[0], -1)
+  t.equal(solution[1], 2)
+  t.equal(status, SATISFIABLE)
+  t.equal(satisfiable, true)
   t.end()
 })
 
-test("it correctly proves unsatisfiability", (t) => {
-  const formula = [[1], [-1]]
+test('solve correctly proves unsatisfiability', (t) => {
+  const formula = [['A'], ['!A']]
   const assumptions = []
-  const result = picosat_sat(formula, assumptions)
-  t.equal(result.status, "unsatisfiable")
-  t.equal(result.satisfiable, false)
+  const {status, satisfiable} = solve(formula, assumptions)
+
+  t.equal(status, UNSATISFIABLE)
+  t.equal(satisfiable, false)
   t.end()
 })

@@ -21,17 +21,29 @@ This can be formulated as a CNF (conjunctive normal form):
 
 (¬*A* ∨ *B*)∧(¬*B* ∨ *C*)∧(¬*C* ∨ *A*)
 
-In `picosat` the problem is encoded as an array of integer arrays. Each positive, non-zero integer represents a literal. Negative integers are negated literals (e.g. not A).
+This library expects the following equivalent notation:
 
 ```js
-const formula = [[-1, 2], [-2, 3], [-3, 1]]
+const fomula = [
+  ['!A', 'B'],
+  ['!B', 'C'],
+  ['!C', 'A']
+]
+
+const solve = require('picosat')
+console.log(solve(formula))
 ```
-Having encoded the above formula, we can pass it to picosat.
 
 ```js
-const picosat_sat = require("picosat")
-const res = picosat_sat(formula)
-console.log(res)
+{
+  satisfiable: true,
+  status: 'satisfiable', // may also be 'unsatisfiable' or 'unknown'
+  solution: [ // negative values means false, positive true.
+    -1, // A
+    -2, // B
+    -3 // C
+  ]
+}
 ```
 
 The result is an object:
@@ -44,14 +56,47 @@ The result is an object:
 }
 ```
 
-We can also test for satisfiability if we assume that a certain variable is `TRUE` or `FALSE`
+We can also test for satisfiability assuming that a certain variable is true or false:
 
 ```js
-console.log(picosat_sat(formula, [1])) // assume A is TRUE
+const assumptions = [
+  'A', // assume A is true
+  '!C', // assume C is false
+]
+solve(formula, assumptions)
 ```
 
+# Low-level interface
+
+This package also provides a low-level interface that works directly on [`Buffer`s](https://nodejs.org/api/buffer.html), without encoding into/decoding from the format that *PicoSAT* works on:
+
 ```js
-console.log(picosat_sat(formula, [1, -3])) // assume A is TRUE, but C is FALSE
+const {solveUnsafe} = require('picosat')
+
+const encodedFomula = Buffer.from([
+  256 - 1, 2, // !A, B
+  0, // separator
+  256 - 2, 3, // !B, C
+  0, // separator
+  256 - 3, 1, // !C, A
+  0 // separator
+])
+const encodedAssumptions = Buffer.from([
+  256 - 1 // assume A is false
+])
+
+const result = solveUnsafe(encodedFormula, encodedAssumptions)
+console.log('status', result[0])
+console.log('solution', result.slice(1))
+```
+
+```
+status 10 // 10: satisfiable, 20: unsatisfiable, otherwise unknown
+solution [
+  -1, // A
+  -2, // B
+  -3 // C
+]
 ```
 
 ## License

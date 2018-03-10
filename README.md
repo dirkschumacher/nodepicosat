@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.org/dirkschumacher/nodepicosat.svg?branch=master)](https://travis-ci.org/dirkschumacher/nodepicosat)
-[![npm version](https://img.shields.io/npm/v/picosat.svg)](https://www.npmjs.com/package/picosat)
-
 # picosat for node
 
-Node bindings to the [PicoSAT solver release 965](http://fmv.jku.at/picosat/) by Armin Biere. The PicoSAT C code is distributed under a MIT style license and is bundled with this package.
+**Node bindings to the [PicoSAT solver release 965](http://fmv.jku.at/picosat/) by Armin Biere.** The PicoSAT C code is distributed under a MIT style license and is bundled with this package.
+
+[![Build Status](https://travis-ci.org/dirkschumacher/nodepicosat.svg?branch=master)](https://travis-ci.org/dirkschumacher/nodepicosat)
+[![npm version](https://img.shields.io/npm/v/picosat.svg)](https://www.npmjs.com/package/picosat)
 
 ## Install
 
@@ -12,7 +12,6 @@ npm install picosat
 ```
 
 ## Example
-
 
 Suppose we want to test the following formula for satisfiability:
 
@@ -57,4 +56,6 @@ console.log(picosat_sat(formula, [1, -3])) // assume A is TRUE, but C is FALSE
 
 ## License
 
-This package is licensed under MIT. The PicoSAT solver bundled in this package is licensed MIT as well: Copyright (c) Armin Biere, Johannes Kepler University.
+This package is licensed under MIT.
+
+The PicoSAT solver bundled with this package is licensed under MIT as well: Copyright (c) Armin Biere, Johannes Kepler University.

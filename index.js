@@ -1,11 +1,12 @@
-"use strict"
+'use strict'
+
 const bindings = require('node-gyp-build')(__dirname)
 
 const encode = (formula, assumptions) => {
-  if (!Array.isArray(formula)) throw new Error(`formula must be an array.`)
-  if (!Array.isArray(assumptions)) throw new Error(`assumptions must be an array.`)
+  if (!Array.isArray(formula)) throw new Error('formula must be an array.')
+  if (!Array.isArray(assumptions)) throw new Error('assumptions must be an array.')
   if (formula.length === 0) {
-    throw new Error(`formula must have 1 or more clauses.`)
+    throw new Error('formula must have 1 or more clauses.')
   }
 
   const encodedFormula = []

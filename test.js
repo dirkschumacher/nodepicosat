@@ -1,7 +1,7 @@
-"use strict"
+'use strict'
 
-const test = require("tape")
-const solve = require(".")
+const test = require('tape')
+const solve = require('.')
 const {encode, solveUnsafe, SATISFIABLE, UNSATISFIABLE} = solve
 
 const formula1 = [

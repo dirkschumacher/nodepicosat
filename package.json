@@ -11,7 +11,8 @@
   ],
   "scripts": {
     "install": "node-gyp-build",
-    "test": "node test.js"
+    "test": "node test.js",
+    "benchmark": "node benchmark.js"
   },
   "keywords": [
     "picosat",
@@ -32,6 +33,7 @@
     "node-gyp-build": "^3.2.2"
   },
   "devDependencies": {
+    "benchmark": "^2.1.4",
     "tape": "^4.9.0"
   }
 }

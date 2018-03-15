@@ -3,12 +3,12 @@
 const {Suite} = require('benchmark')
 
 const solve = require('.')
-const {encode, solveUnsafe} = solve
+const {encodeStrings, solveWithIntegers, solveUnsafe} = solve
 
 // (¬A ∨ B)∧(¬B ∨ C)∧(¬C ∨ A)
 const formula1 = [['!A', 'B'], ['!B', 'C'], ['!C', 'A']]
 const assumptions1 = []
-const [encFormula1, encAssumptions1] = encode(formula1, assumptions1)
+const [encFormula1, encAssumptions1] = encodeStrings(formula1, assumptions1)
 
 const formula2 = [
 	['!A', 'B', 'C'],

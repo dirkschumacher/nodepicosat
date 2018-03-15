@@ -4,7 +4,7 @@ const test = require('tape')
 const solve = require('.')
 const {
   encodeStrings, encodeIntegers,
-  solveWithIntegers, solveUnsafe,
+  solveWithStrings, solveUnsafe,
   SATISFIABLE, UNSATISFIABLE
 } = solve
 
@@ -63,10 +63,10 @@ test('encodeIntegers works', (t) => {
   t.end()
 })
 
-test('solveWithIntegers works', (t) => {
+test('solve works', (t) => {
   // (¬A ∨ B)∧(¬B ∨ C)∧(¬C ∨ A)
   // A = 1, B = 2, C = 3
-  const {status, satisfiable} = solveWithIntegers([
+  const {status, satisfiable} = solve([
     [-1, 2],
     [-2, 3],
     [-3, 1]
@@ -94,16 +94,16 @@ test('solveUnsafe works', (t) => {
   t.end()
 })
 
-test('solve solves a simple problem', (t) => {
-  const {status, satisfiable} = solve(formula2)
+test('solveWithStrings solves a simple problem', (t) => {
+  const {status, satisfiable} = solveWithStrings(formula2)
 
   t.equal(status, SATISFIABLE)
   t.equal(satisfiable, true)
   t.end()
 })
 
-test('solve supports assumptions', (t) => {
-  const {solution, status, satisfiable} = solve(formula2, assumptions2)
+test('solveWithStrings supports assumptions', (t) => {
+  const {solution, status, satisfiable} = solveWithStrings(formula2, assumptions2)
 
   t.equal(solution.length, 2)
   t.equal(solution[0], -1)
@@ -113,10 +113,10 @@ test('solve supports assumptions', (t) => {
   t.end()
 })
 
-test('solve correctly proves unsatisfiability', (t) => {
+test('solveWithStrings correctly proves unsatisfiability', (t) => {
   const formula = [['A'], ['!A']]
   const assumptions = []
-  const {status, satisfiable} = solve(formula, assumptions)
+  const {status, satisfiable} = solveWithStrings(formula, assumptions)
 
   t.equal(status, UNSATISFIABLE)
   t.equal(satisfiable, false)

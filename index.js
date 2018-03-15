@@ -141,9 +141,9 @@ const solveWithIntegers = (formula, assumptions = []) => {
   return _solve(formula, assumptions, encodeIntegers)
 }
 
-Object.assign(solveWithStrings, {
+Object.assign(solveWithIntegers, {
   encodeStrings, encodeIntegers,
-  solveWithIntegers, solveUnsafe,
+  solveWithStrings, solveUnsafe,
   UNKNOWN, SATISFIABLE, UNSATISFIABLE
 })
-module.exports = solveWithStrings
+module.exports = solveWithIntegers

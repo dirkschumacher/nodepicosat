@@ -30,8 +30,8 @@ const fomula = [
   ['!C', 'A']
 ]
 
-const solve = require('picosat')
-console.log(solve(formula))
+const {solveWithStrings} = require('picosat')
+console.log(solveWithStrings(formula))
 ```
 
 The result is an object:
@@ -55,15 +55,15 @@ const assumptions = [
   'A', // assume A is true
   '!C', // assume C is false
 ]
-solve(formula, assumptions)
+solveWithStrings(formula, assumptions)
 ```
 
 ## Integer interface
 
-If you want to use integers to define the input, like other PicoSAT bindings in other languages expect it ([`rpicosat`](https://github.com/dirkschumacher/rpicosat#example), [`pycosat`](https://github.com/ContinuumIO/pycosat#example)), you can use `solveWithIntegers`.
+If you want to use integers to define the input, like other PicoSAT bindings in other languages expect it ([`rpicosat`](https://github.com/dirkschumacher/rpicosat#example), [`pycosat`](https://github.com/ContinuumIO/pycosat#example)), you can use `solve`.
 
 ```js
-const {solveWithIntegers} = require('picosat')
+const solve = require('picosat')
 
 const fomula = [
   [-1, 2], // !A, B
@@ -74,7 +74,7 @@ const assumptions = Buffer.from([
   -1 // assume A is false
 ])
 
-const result = solveWithIntegers(formula, assumptions)
+const result = solve(formula, assumptions)
 console.log('status', result[0])
 console.log('solution', result.slice(1))
 ```

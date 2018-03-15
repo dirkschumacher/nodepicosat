@@ -3,7 +3,7 @@
 const {Suite} = require('benchmark')
 
 const solve = require('.')
-const {encodeStrings, solveWithIntegers, solveUnsafe} = solve
+const {encodeStrings, solveWithStrings, solveUnsafe} = solve
 
 // (¬A ∨ B)∧(¬B ∨ C)∧(¬C ∨ A)
 const formula1 = [['!A', 'B'], ['!B', 'C'], ['!C', 'A']]
@@ -30,21 +30,21 @@ const [encFormula2, encAssumptions2] = encodeStrings(formula2, assumptions2)
 
 new Suite()
 
-.add('example 1 – solve', function () {
-	solve(formula1, assumptions1)
+.add('example 1 – solveWithStrings', function () {
+	solveWithStrings(formula1, assumptions1)
 })
-.add('example 1 – solveWithIntegers', function () {
-	solveWithIntegers(intFormula1, intAssumptions1)
+.add('example 1 – solve', function () {
+	solve(intFormula1, intAssumptions1)
 })
 .add('example 1 – solveUnsafe', function () {
 	solveUnsafe(encFormula1, encAssumptions1)
 })
 
-.add('example 2 – solve', function () {
-	solve(formula2, assumptions2)
+.add('example 2 – solveWithStrings', function () {
+	solveWithStrings(formula2, assumptions2)
 })
-.add('example 2 – solveWithIntegers', function () {
-	solveWithIntegers(intFormula2, intAssumptions2)
+.add('example 2 – solve', function () {
+	solve(intFormula2, intAssumptions2)
 })
 .add('example 2 – solveUnsafe', function () {
 	solveUnsafe(encFormula2, encAssumptions2)

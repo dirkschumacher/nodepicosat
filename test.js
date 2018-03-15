@@ -3,8 +3,8 @@
 const test = require('tape')
 const solve = require('.')
 const {
-  encodeStrings,
-  solveUnsafe,
+  encodeStrings, encodeIntegers,
+  solveWithIntegers, solveUnsafe,
   SATISFIABLE, UNSATISFIABLE
 } = solve
 
@@ -41,8 +41,47 @@ test('encodeStrings works', (t) => {
   t.end()
 })
 
+test('encodeIntegers works', (t) => {
+  const [encFormula, encAssumptions] = encodeIntegers([
+    [ 1, 2], // A, B
+    [-1, 2] // !A, B
+  ], [
+    -1 // !A
+  ])
+
+  const expectedFormula = Buffer.from([
+    1, 2, 0,
+    256 - 1, 2, 0
+  ])
+  t.ok(Buffer.isBuffer(encFormula))
+  t.equal(encFormula.toString('hex'), expectedFormula.toString('hex'))
+
+  const expectedAssumptions = Buffer.from([256 - 1])
+  t.ok(Buffer.isBuffer(encAssumptions))
+  t.equal(encAssumptions.toString('hex'), expectedAssumptions.toString('hex'))
+
+  t.end()
+})
+
+test('solveWithIntegers works', (t) => {
+  // (¬A ∨ B)∧(¬B ∨ C)∧(¬C ∨ A)
+  // A = 1, B = 2, C = 3
+  const {status, satisfiable} = solveWithIntegers([
+    [-1, 2],
+    [-2, 3],
+    [-3, 1]
+  ], [
+    1
+  ])
+
+  t.equal(status, SATISFIABLE)
+  t.equal(satisfiable, true)
+  t.end()
+})
+
 test('solveUnsafe works', (t) => {
   // (¬A ∨ B)∧(¬B ∨ C)∧(¬C ∨ A)
+  // A = 1, B = 2, C = 3
   const encFormula = Buffer.from([
     256 - 1, 2, 0,
     256 - 2, 3, 0,

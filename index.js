@@ -59,6 +59,56 @@ const encodeStrings = (formula, assumptions) => {
   ]
 }
 
+const encodeIntegers = (formula, assumptions) => {
+  if (!Array.isArray(formula)) throw new Error('formula must be an array.')
+  if (!Array.isArray(assumptions)) throw new Error('assumptions must be an array.')
+  if (formula.length === 0) {
+    throw new Error('formula must have 1 or more clauses.')
+  }
+
+  const encodedFormula = []
+  for (let i = 0; i < formula.length; i++) {
+    const clause = formula[i]
+    if (!Array.isArray(clause)) {
+      throw new Error(`clause formula[${i}] must be an array.`)
+    }
+
+    for (let j = 0; j < clause.length; j++) {
+      const literal = clause[j]
+      if ('number' !== typeof literal) {
+        throw new Error(`literal formula[${i}][${j}] must be a number.`)
+      }
+      if ((literal | 0) !== literal) {
+        throw new Error(`literal formula[${i}][${j}] must be an integer.`)
+      }
+      if (literal === 0) {
+        throw new Error(`literal formula[${i}][${j}] must be != 0.`)
+      }
+
+      encodedFormula.push(literal)
+    }
+    encodedFormula.push(0) // separator
+  }
+
+  for (let i = 0; i < assumptions.length; i++) {
+    const literal = assumptions[i]
+      if ('number' !== typeof literal) {
+        throw new Error(`literal assumptions[${i}] must be a number.`)
+      }
+      if ((literal | 0) !== literal) {
+        throw new Error(`literal assumptions[${i}] must be an integer.`)
+      }
+      if (literal === 0) {
+        throw new Error(`literal assumptions[${i}] must be != 0.`)
+      }
+  }
+
+  return [
+    Buffer.from(encodedFormula),
+    Buffer.from(assumptions)
+  ]
+}
+
 const UNKNOWN = 'unknown'
 const SATISFIABLE = 'satisfiable'
 const UNSATISFIABLE = 'unsatisfiable'
@@ -83,13 +133,17 @@ const _solve = (formula, assumptions, encode) => {
   }
 }
 
-const solve = (formula, assumptions = []) => {
+const solveWithStrings = (formula, assumptions = []) => {
   return _solve(formula, assumptions, encodeStrings)
 }
 
-Object.assign(solve, {
-  encodeStrings,
-  solveUnsafe,
+const solveWithIntegers = (formula, assumptions = []) => {
+  return _solve(formula, assumptions, encodeIntegers)
+}
+
+Object.assign(solveWithStrings, {
+  encodeStrings, encodeIntegers,
+  solveWithIntegers, solveUnsafe,
   UNKNOWN, SATISFIABLE, UNSATISFIABLE
 })
-module.exports = solve
+module.exports = solveWithStrings

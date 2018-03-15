@@ -34,6 +34,8 @@ const solve = require('picosat')
 console.log(solve(formula))
 ```
 
+The result is an object:
+
 ```js
 {
   satisfiable: true,
@@ -43,16 +45,6 @@ console.log(solve(formula))
     -2, // B
     -3 // C
   ]
-}
-```
-
-The result is an object:
-
-```js
-{
-  satisfiable: <boolean>, // true iff satisfiable
-  statusCode: <string>, // satisfiable, unsatisfiable, unknown
-  solution: <Array int> // an integer array with a positive or negative value for each variable. Negative values means false, positive true.
 }
 ```
 
@@ -68,7 +60,7 @@ solve(formula, assumptions)
 
 ## Integer interface
 
-If you want to use integers to define the input, like other libraries in other languages expect it ([`rpicosat`](https://github.com/dirkschumacher/rpicosat#example), [`pycosat`](https://github.com/ContinuumIO/pycosat#example)), you can use `solveWithIntegers`.
+If you want to use integers to define the input, like other PicoSAT bindings in other languages expect it ([`rpicosat`](https://github.com/dirkschumacher/rpicosat#example), [`pycosat`](https://github.com/ContinuumIO/pycosat#example)), you can use `solveWithIntegers`.
 
 ```js
 const {solveWithIntegers} = require('picosat')

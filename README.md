@@ -66,6 +66,36 @@ const assumptions = [
 solve(formula, assumptions)
 ```
 
+## Integer interface
+
+If you want to use integers to define the input, like other libraries in other languages expect it ([`rpicosat`](https://github.com/dirkschumacher/rpicosat#example), [`pycosat`](https://github.com/ContinuumIO/pycosat#example)), you can use `solveWithIntegers`.
+
+```js
+const {solveWithIntegers} = require('picosat')
+
+const fomula = [
+  [-1, 2], // !A, B
+  [-2, 3], // !B, C
+  [-3, 1] // !C, A
+]
+const assumptions = Buffer.from([
+  -1 // assume A is false
+])
+
+const result = solveWithIntegers(formula, assumptions)
+console.log('status', result[0])
+console.log('solution', result.slice(1))
+```
+
+```
+status 10 // 10: satisfiable, 20: unsatisfiable, otherwise unknown
+solution [
+  -1, // A
+  -2, // B
+  -3 // C
+]
+```
+
 ## Low-level interface
 
 This package also provides a low-level interface that works directly on [`Buffer`s](https://nodejs.org/api/buffer.html), without encoding into/decoding from the format that *PicoSAT* works on:

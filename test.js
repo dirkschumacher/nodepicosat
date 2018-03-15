@@ -2,7 +2,11 @@
 
 const test = require('tape')
 const solve = require('.')
-const {encode, solveUnsafe, SATISFIABLE, UNSATISFIABLE} = solve
+const {
+  encodeStrings,
+  solveUnsafe,
+  SATISFIABLE, UNSATISFIABLE
+} = solve
 
 const formula1 = [
   ['!A', 'B', 'C'],
@@ -18,8 +22,8 @@ const formula2 = [
 ]
 const assumptions2 = ['!A', 'B']
 
-test('encode works', (t) => {
-  const [encFormula, encAssumptions] = encode(formula1, assumptions1)
+test('encodeStrings works', (t) => {
+  const [encFormula, encAssumptions] = encodeStrings(formula1, assumptions1)
 
   const expectedFormula = Buffer.from([
     256 - 1, 2, 3, 0,

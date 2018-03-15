@@ -2,7 +2,7 @@
 
 const bindings = require('node-gyp-build')(__dirname)
 
-const encode = (formula, assumptions) => {
+const encodeStrings = (formula, assumptions) => {
   if (!Array.isArray(formula)) throw new Error('formula must be an array.')
   if (!Array.isArray(assumptions)) throw new Error('assumptions must be an array.')
   if (formula.length === 0) {
@@ -63,7 +63,11 @@ const UNKNOWN = 'unknown'
 const SATISFIABLE = 'satisfiable'
 const UNSATISFIABLE = 'unsatisfiable'
 
-const solve = (formula, assumptions = []) => {
+const solveUnsafe = (formula, assumptions) => {
+  return bindings.node_picosat_sat(formula, assumptions)
+}
+
+const _solve = (formula, assumptions, encode) => {
   const [encodedFormula, encodedAssumptions] = encode(formula, assumptions)
   const solution = solveUnsafe(encodedFormula, encodedAssumptions)
 
@@ -79,9 +83,13 @@ const solve = (formula, assumptions = []) => {
   }
 }
 
-const solveUnsafe = (formula, assumptions) => {
-  return bindings.node_picosat_sat(formula, assumptions)
+const solve = (formula, assumptions = []) => {
+  return _solve(formula, assumptions, encodeStrings)
 }
 
-Object.assign(solve, {encode, solveUnsafe, UNKNOWN, SATISFIABLE, UNSATISFIABLE})
+Object.assign(solve, {
+  encodeStrings,
+  solveUnsafe,
+  UNKNOWN, SATISFIABLE, UNSATISFIABLE
+})
 module.exports = solve

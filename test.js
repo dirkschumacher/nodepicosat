@@ -99,6 +99,23 @@ test('solve works', (t) => {
   t.end()
 })
 
+test('solve works with >255 variables', (t) => {
+  // We check if it supports more than 255 variables in order to assert
+  // that it does not write Int8 values.
+  const largeFomula = []
+  const expectedSolution = []
+  for (let i = 1, j = 0; i < 1000; i++) {
+    const v = i * (i % 2 === 0 ? -1 : 1) // 1, -2, 3, -4, …
+    largeFomula.push([v])
+    expectedSolution.push(v)
+  }
+
+  const {satisfiable, solution} = solve(largeFomula)
+  t.equal(satisfiable, true)
+  t.deepEqual(solution, expectedSolution)
+  t.end()
+})
+
 test('solveUnsafe works', (t) => {
   // (¬A ∨ B)∧(¬B ∨ C)∧(¬C ∨ A)
   // A = 1, B = 2, C = 3

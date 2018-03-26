@@ -2,6 +2,7 @@
 
 const test = require('tape')
 const solve = require('.')
+const encodeInt32Array = require('./lib/encode')
 const {
   encodeStrings, encodeIntegers,
   solveWithStrings, solveUnsafe,
@@ -21,6 +22,25 @@ const formula2 = [
   ['!A', 'B']
 ]
 const assumptions2 = ['!A', 'B']
+
+test('encodeInt32Array works', (t) => {
+  const buf = encodeInt32Array([
+    1,
+    -1,
+    1000,
+    -1000
+  ])
+
+  t.ok(Buffer.isBuffer(buf))
+  const expectedBuf = Buffer.from([
+    0x01, 0x00, 0x00, 0x00,
+    0xff, 0xff, 0xff, 0xff,
+    0xe8, 0x03, 0x00, 0x00,
+    0x18, 0xfc, 0xff, 0xff
+  ])
+  t.equal(buf.toString('hex'), expectedBuf.toString('hex'))
+  t.end()
+})
 
 test('encodeStrings works', (t) => {
   const [encFormula, encAssumptions] = encodeStrings(formula1, assumptions1)

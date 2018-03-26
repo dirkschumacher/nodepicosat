@@ -2,6 +2,9 @@
 
 const bindings = require('node-gyp-build')(__dirname)
 
+const encodeInt32Array = require('./lib/encode')
+// todo: decodeInt32Array
+
 const encodeStrings = (formula, assumptions) => {
   if (!Array.isArray(formula)) throw new Error('formula must be an array.')
   if (!Array.isArray(assumptions)) throw new Error('assumptions must be an array.')
@@ -35,7 +38,6 @@ const encodeStrings = (formula, assumptions) => {
       const id = variableToId[variable]
       encodedFormula.push(isNegated ? id * -1 : id)
     }
-
     encodedFormula.push(0) // separator
   }
 
@@ -53,9 +55,10 @@ const encodeStrings = (formula, assumptions) => {
     encodedAssumptions.push(isNegated ? id * -1 : id)
   }
 
+  // PicoSAT expects Int32
   return [
-    Buffer.from(encodedFormula),
-    Buffer.from(encodedAssumptions)
+    encodeInt32Array(encodedFormula),
+    encodeInt32Array(encodedAssumptions)
   ]
 }
 
@@ -103,9 +106,10 @@ const encodeIntegers = (formula, assumptions) => {
       }
   }
 
+  // PicoSAT expects Int32
   return [
-    Buffer.from(encodedFormula),
-    Buffer.from(assumptions)
+    encodeInt32Array(encodedFormula),
+    encodeInt32Array(assumptions)
   ]
 }
 
@@ -118,8 +122,8 @@ const solveUnsafe = (formula, assumptions) => {
 }
 
 const _solve = (formula, assumptions, encode) => {
-  const [encodedFormula, encodedAssumptions] = encode(formula, assumptions)
-  const solution = solveUnsafe(encodedFormula, encodedAssumptions)
+  const [encFormula, encAssumptions] = encode(formula, assumptions)
+  const solution = solveUnsafe(encFormula, encAssumptions)
 
   let statusCode
   if (solution[0] === 10) statusCode = SATISFIABLE

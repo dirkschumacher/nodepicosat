@@ -1,6 +1,6 @@
 'use strict'
 
-const solve = require('.')
+const {solveWithStrings} = require('.')
 
 // (A ⇒ B)∧(B ⇒ C)∧(C ⇒ A)
 // (¬A ∨ B)∧(¬B ∨ C)∧(¬C ∨ A)
@@ -10,4 +10,4 @@ const formula = [
 	['!C', 'A']
 ]
 
-console.log(solve(formula, ['!A']))
+console.log(solveWithStrings(formula, ['!A']))

@@ -70,9 +70,9 @@ const fomula = [
   [-2, 3], // !B, C
   [-3, 1] // !C, A
 ]
-const assumptions = Buffer.from([
+const assumptions = [
   -1 // assume A is false
-])
+]
 
 const result = solve(formula, assumptions)
 console.log('status', result[0])
@@ -93,18 +93,19 @@ solution [
 This package also provides a low-level interface that works directly on [`Buffer`s](https://nodejs.org/api/buffer.html), without encoding into/decoding from the format that *PicoSAT* works on:
 
 ```js
+const encodeInt32Array = require('picosat/lib/encode')
 const {solveUnsafe} = require('picosat')
 
-const encodedFomula = Buffer.from([
-  256 - 1, 2, // !A, B
+const encodedFomula = encodeInt32Array([
+  -1, 2, // !A, B
   0, // separator
-  256 - 2, 3, // !B, C
+  -2, 3, // !B, C
   0, // separator
-  256 - 3, 1, // !C, A
+  -3, 1, // !C, A
   0 // separator
 ])
-const encodedAssumptions = Buffer.from([
-  256 - 1 // assume A is false
+const encodedAssumptions = encodeInt32Array([
+  -1 // assume A is false
 ])
 
 const result = solveUnsafe(encodedFormula, encodedAssumptions)

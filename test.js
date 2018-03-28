@@ -86,7 +86,7 @@ test('encodeIntegers works', (t) => {
 test('solve works', (t) => {
   // (¬A ∨ B)∧(¬B ∨ C)∧(¬C ∨ A)
   // A = 1, B = 2, C = 3
-  const {status, satisfiable} = solve([
+  const {statusCode, satisfiable} = solve([
     [-1, 2],
     [-2, 3],
     [-3, 1]
@@ -94,7 +94,7 @@ test('solve works', (t) => {
     1
   ])
 
-  t.equal(status, SATISFIABLE)
+  t.equal(statusCode, SATISFIABLE)
   t.equal(satisfiable, true)
   t.end()
 })
@@ -132,20 +132,20 @@ test('solveUnsafe works', (t) => {
 })
 
 test('solveWithStrings solves a simple problem', (t) => {
-  const {status, satisfiable} = solveWithStrings(formula2)
+  const {statusCode, satisfiable} = solveWithStrings(formula2)
 
-  t.equal(status, SATISFIABLE)
+  t.equal(statusCode, SATISFIABLE)
   t.equal(satisfiable, true)
   t.end()
 })
 
 test('solveWithStrings supports assumptions', (t) => {
-  const {solution, status, satisfiable} = solveWithStrings(formula2, assumptions2)
+  const {solution, statusCode, satisfiable} = solveWithStrings(formula2, assumptions2)
 
   t.equal(solution.length, 2)
   t.equal(solution[0], -1)
   t.equal(solution[1], 2)
-  t.equal(status, SATISFIABLE)
+  t.equal(statusCode, SATISFIABLE)
   t.equal(satisfiable, true)
   t.end()
 })
@@ -153,9 +153,9 @@ test('solveWithStrings supports assumptions', (t) => {
 test('solveWithStrings correctly proves unsatisfiability', (t) => {
   const formula = [['A'], ['!A']]
   const assumptions = []
-  const {status, satisfiable} = solveWithStrings(formula, assumptions)
+  const {statusCode, satisfiable} = solveWithStrings(formula, assumptions)
 
-  t.equal(status, UNSATISFIABLE)
+  t.equal(statusCode, UNSATISFIABLE)
   t.equal(satisfiable, false)
   t.end()
 })

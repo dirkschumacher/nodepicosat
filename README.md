@@ -39,7 +39,7 @@ The result is an object:
 ```js
 {
   satisfiable: true,
-  status: 'satisfiable', // may also be 'unsatisfiable' or 'unknown'
+  statusCode: 'satisfiable', // may also be 'unsatisfiable' or 'unknown'
   solution: [ // negative values means false, positive true.
     -1, // A
     -2, // B
@@ -75,12 +75,12 @@ const assumptions = [
 ]
 
 const result = solve(formula, assumptions)
-console.log('status', result[0])
+console.log('status code', result[0])
 console.log('solution', result.slice(1))
 ```
 
 ```
-status 10 // 10: satisfiable, 20: unsatisfiable, otherwise unknown
+statusCode 10 // 10: satisfiable, 20: unsatisfiable, otherwise unknown
 solution [
   -1, // A
   -2, // B
@@ -109,12 +109,12 @@ const encodedAssumptions = encodeInt32Array([
 ])
 
 const result = solveUnsafe(encodedFormula, encodedAssumptions)
-console.log('status', result[0])
+console.log('status code', result[0])
 console.log('solution', result.slice(1))
 ```
 
 ```
-status 10 // 10: satisfiable, 20: unsatisfiable, otherwise unknown
+statusCode 10 // 10: satisfiable, 20: unsatisfiable, otherwise unknown
 solution [
   -1, // A
   -2, // B

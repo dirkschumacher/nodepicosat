@@ -132,7 +132,7 @@ const _solve = (formula, assumptions, encode) => {
 
   return {
     satisfiable: statusCode === 'satisfiable',
-    status: statusCode,
+    statusCode,
     solution: solution.slice(1)
   }
 }

@@ -1,63 +1,153 @@
-"use strict"
+'use strict'
+
 const bindings = require('node-gyp-build')(__dirname)
 
-const isValidFormula = (formula) => {
-  return Array.isArray(formula) &&
-         formula.length > 0 &&
-         formula.every((arr) => {
-           return Array.isArray(arr) &&
-                  arr.every(Number.isInteger) &&
-                  arr.every(x => x != 0)
-         })
-}
+const encodeInt32Array = require('./lib/encode')
+// todo: decodeInt32Array
 
-const convertFormulaToPicosat = (formula) => {
-  return formula.reduce((acc, el) => {
-    return acc.concat(el).concat([0])
-  }, [])
-}
-
-const isValidAssumptions = (assumptions, nvars) => {
-  // TODO: check for duplicates
-  return Array.isArray(assumptions) &&
-         assumptions.every(Number.isInteger) &&
-         assumptions.map(Math.abs).every(x => x >= 1 && x <= nvars)
-}
-
-const picosat_sat = (formula, assumptions) => {
-  if (!isValidFormula(formula)) {
-    throw "Your formula is not valid. Please use an array of arrays of integers"
+const encodeStrings = (formula, assumptions) => {
+  if (!Array.isArray(formula)) throw new Error('formula must be an array.')
+  if (!Array.isArray(assumptions)) throw new Error('assumptions must be an array.')
+  if (formula.length === 0) {
+    throw new Error('formula must have 1 or more clauses.')
   }
-  const picosatInput = convertFormulaToPicosat(formula)
-  const nVariables = Math.max(...picosatInput.map(Math.abs))
 
-  let assumptionsBuffer
-  if (assumptions) {
-    if (!isValidAssumptions(assumptions, nVariables)) {
-      throw "Your assumptions are not valid. Need to be an array of integers"
+  const encodedFormula = []
+  const variableToId = Object.create(null)
+  let nextVariableId = 1
+
+  for (let i = 0; i < formula.length; i++) {
+    const clause = formula[i]
+    if (!Array.isArray(clause)) {
+      throw new Error(`clause formula[${i}] must be an array.`)
     }
-    assumptionsBuffer = Buffer.from(assumptions)
-  } else {
-    assumptionsBuffer = Buffer.from([])
+
+    for (let j = 0; j < clause.length; j++) {
+      const literal = clause[j]
+      if ('string' !== typeof literal) {
+        throw new Error(`literal formula[${i}][${j}] must be a string.`)
+      }
+
+      const isNegated = literal[0] === '!'
+      const variable = isNegated ? literal.slice(1) : literal
+      if (variable.length === 0) {
+        throw new Error(`literal formula[${i}][${j}] has an invalid format.`)
+      }
+
+      if (!(variable in variableToId)) variableToId[variable] = nextVariableId++
+      const id = variableToId[variable]
+      encodedFormula.push(isNegated ? id * -1 : id)
+    }
+    encodedFormula.push(0) // separator
   }
 
-  const solution = bindings.node_picosat_sat(
-    Buffer.from(picosatInput),
-    assumptionsBuffer
-  )
+  const encodedAssumptions = []
+  for (let i = 0; i < assumptions.length; i++) {
+    const literal = assumptions[i]
 
-  let statusCode = "unknown"
-  if (solution[0] === 10) {
-    statusCode = "satisfiable"
-  } else if (solution[0] === 20) {
-    statusCode = "unsatisfiable"
+    const isNegated = literal[0] === '!'
+    const variable = isNegated ? literal.slice(1) : literal
+    if (!(variable in variableToId)) {
+      throw new Error(`unknown variable '${variable}' in assumptions[${i}].`)
+    }
+
+    const id = variableToId[variable]
+    encodedAssumptions.push(isNegated ? id * -1 : id)
   }
+
+  // PicoSAT expects Int32
+  return [
+    encodeInt32Array(encodedFormula),
+    encodeInt32Array(encodedAssumptions)
+  ]
+}
+
+const encodeIntegers = (formula, assumptions) => {
+  if (!Array.isArray(formula)) throw new Error('formula must be an array.')
+  if (!Array.isArray(assumptions)) throw new Error('assumptions must be an array.')
+  if (formula.length === 0) {
+    throw new Error('formula must have 1 or more clauses.')
+  }
+
+  const encodedFormula = []
+  for (let i = 0; i < formula.length; i++) {
+    const clause = formula[i]
+    if (!Array.isArray(clause)) {
+      throw new Error(`clause formula[${i}] must be an array.`)
+    }
+
+    for (let j = 0; j < clause.length; j++) {
+      const literal = clause[j]
+      if ('number' !== typeof literal) {
+        throw new Error(`literal formula[${i}][${j}] must be a number.`)
+      }
+      if ((literal | 0) !== literal) {
+        throw new Error(`literal formula[${i}][${j}] must be an integer.`)
+      }
+      if (literal === 0) {
+        throw new Error(`literal formula[${i}][${j}] must be != 0.`)
+      }
+
+      encodedFormula.push(literal)
+    }
+    encodedFormula.push(0) // separator
+  }
+
+  for (let i = 0; i < assumptions.length; i++) {
+    const literal = assumptions[i]
+      if ('number' !== typeof literal) {
+        throw new Error(`literal assumptions[${i}] must be a number.`)
+      }
+      if ((literal | 0) !== literal) {
+        throw new Error(`literal assumptions[${i}] must be an integer.`)
+      }
+      if (literal === 0) {
+        throw new Error(`literal assumptions[${i}] must be != 0.`)
+      }
+  }
+
+  // PicoSAT expects Int32
+  return [
+    encodeInt32Array(encodedFormula),
+    encodeInt32Array(assumptions)
+  ]
+}
+
+const UNKNOWN = 'unknown'
+const SATISFIABLE = 'satisfiable'
+const UNSATISFIABLE = 'unsatisfiable'
+
+const solveUnsafe = (formula, assumptions) => {
+  return bindings.node_picosat_sat(formula, assumptions)
+}
+
+const _solve = (formula, assumptions, encode) => {
+  const [encFormula, encAssumptions] = encode(formula, assumptions)
+  const solution = solveUnsafe(encFormula, encAssumptions)
+
+  let statusCode
+  if (solution[0] === 10) statusCode = SATISFIABLE
+  else if (solution[0] === 20) statusCode = UNSATISFIABLE
+  else statusCode = UNKNOWN
 
   return {
-    satisfiable: statusCode === "satisfiable",
-    status: statusCode,
+    satisfiable: statusCode === 'satisfiable',
+    statusCode,
     solution: solution.slice(1)
   }
 }
 
-module.exports = picosat_sat
+const solveWithStrings = (formula, assumptions = []) => {
+  return _solve(formula, assumptions, encodeStrings)
+}
+
+const solveWithIntegers = (formula, assumptions = []) => {
+  return _solve(formula, assumptions, encodeIntegers)
+}
+
+Object.assign(solveWithIntegers, {
+  encodeStrings, encodeIntegers,
+  solveWithStrings, solveUnsafe,
+  UNKNOWN, SATISFIABLE, UNSATISFIABLE
+})
+module.exports = solveWithIntegers

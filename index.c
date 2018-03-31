@@ -25,7 +25,7 @@ NAPI_METHOD(node_picosat_sat) {
   napi_value result_array;
 
   if (status_code == PICOSAT_SATISFIABLE) {
-    int nvars = picosat_variables(pico_ptr);
+    size_t nvars = picosat_variables(pico_ptr);
     napi_create_array_with_length(env, nvars + 1, &result_array);
 
     // get and set the variable solutions
